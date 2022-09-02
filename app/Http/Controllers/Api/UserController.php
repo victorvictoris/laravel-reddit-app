@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
@@ -17,9 +18,9 @@ class UserController extends Controller
         $this->clientSecret = 'SH-v9IuufgovStt_-uCZefZn_JXPJw';
     }
 
-    public function show()
+    public function show(Request $request)
     {
-        $response = Http::withToken('2203211786872-29kSHkpE7w03CUBltjcw6zUJDPqykA')
+        $response = Http::withToken($request->access_token)
             ->get('https://oauth.reddit.com/api/v1/me');
 
         return $response->json();

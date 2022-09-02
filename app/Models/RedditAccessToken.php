@@ -32,19 +32,10 @@ class RedditAccessToken extends Model
     ];
 
     //Accessors & Mutators
-    //Accessors & Mutators
-    public function accessToken() : Attribute
-    {
-        return new Attribute(
-            set: fn($value) => bcrypt($value)
-        );
-    }
-
-    public function expiresAt() : Attribute
-    {
-        return new Attribute(
-            get: fn($value) => Carbon::parse($value)->toFormattedDateString(),
-            set: fn($value) => Carbon::parse($value)->toDateString()
-        );
-    }
+//    public function accessToken() : Attribute
+//    {
+//        return new Attribute(
+//            set: fn($value) => bcrypt($value)
+//        );
+//    }
 }

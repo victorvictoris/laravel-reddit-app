@@ -24,7 +24,8 @@ Route::controller(AuthenticationController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
 });
 
-
-Route::controller(UserController::class)->group(function () {
-    Route::get('/me', 'show');
+Route::middleware('redditRegistered')->group(function () {
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/me', 'show');
+    });
 });
