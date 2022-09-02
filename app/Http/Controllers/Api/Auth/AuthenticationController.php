@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Models\RedditAccessToken;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -31,17 +32,23 @@ class AuthenticationController extends Controller
             return response()->json('You provided bad credentials.', $response->status());
         }
 
+        $user = User::updateOrCreate(
+            ['username' => $request->username],
+            ['password' => $request->password]
+        );
+
         $access_token = $response['access_token'];
 
-        $redditAccessToken = RedditAccessToken::create([
-            'access_token' => $access_token,
-            'expires_at' => Carbon::now()->addSeconds($response['expires_in']),
-        ]);
+        $redditAccessToken = RedditAccessToken::updateOrCreate(
+            ['user_id' => $user->id],
+            ['access_token' => $access_token,
+            'expires_at' => Carbon::now()->addSeconds($response['expires_in'])
+            ]);
 
         return response()
             ->json([
                 'token' => $access_token,
-                'message' => 'You successfully logged in. Your token will expire at: '. $redditAccessToken->expires_at],
+                'message' => 'You successfully logged in. Your token will expire at: ' . $redditAccessToken->expires_at],
                 $response->status());
     }
 }

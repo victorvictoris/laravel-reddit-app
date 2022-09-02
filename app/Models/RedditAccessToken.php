@@ -17,6 +17,7 @@ class RedditAccessToken extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'access_token',
         'last_used_at',
         'expires_at'
@@ -32,10 +33,10 @@ class RedditAccessToken extends Model
     ];
 
     //Accessors & Mutators
-//    public function accessToken() : Attribute
-//    {
-//        return new Attribute(
-//            set: fn($value) => bcrypt($value)
-//        );
-//    }
+    public function accessToken() : Attribute
+    {
+        return new Attribute(
+            set: fn($value) => bcrypt($value)
+        );
+    }
 }
