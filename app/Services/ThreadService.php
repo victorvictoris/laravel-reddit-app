@@ -7,13 +7,14 @@ use App\Http\Requests\Api\Thread\UpdateThreadRequest;
 use App\Models\Thread;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ThreadService
 {
     public function storeThread(StoreThreadRequest $request)
     {
-        return Thread::create(['title' => $request->title, 'text' => $request->text,
-            'subreddit_name' => $request->subreddit_name, 'user_id' => $request->loggedUser()->id]);
+        return response()->json(['thread' => Thread::create(['title' => $request->title, 'text' => $request->text,
+            'subreddit_name' => $request->subreddit_name, 'user_id' => $request->loggedUser()->id])]);
     }
 
     public function updateThread(Thread $thread, UpdateThreadRequest $request)
@@ -23,9 +24,34 @@ class ThreadService
             $thread->update(['title' => $request->title, 'text' => $request->text,
                 'subreddit_name' => $request->subreddit_name]);
 
-            return $thread;
+            return response()->json(['thread' => $thread]);
         }
 
-        return ['message' => 'Oops, you can not edit Thread that is created more than six hours ago'];
+        return response()->json(['message' => 'Oops, you can not edit Thread that is created more than six hours ago']);
+    }
+
+    public function destroyThread(Thread $thread)
+    {
+        try {
+            $thread->delete();
+
+            return response()->json(['message' => 'You have successfully deleted a thread']);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception]);
+        }
+    }
+
+    public function publishThread(Thread $thread, Request $request)
+    {
+        $response = Http::withToken($request->access_token)
+            ->asForm()
+            ->post('https://oauth.reddit.com/api/submit', [
+                'title' => $thread->title,
+                'text' => $thread->text,
+                'sr' => 'r/'.$thread->subreddit_name,
+                'kind' => 'self'
+            ]);
+
+        return response()->json(['message' => $response->status()]);
     }
 }

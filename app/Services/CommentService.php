@@ -18,7 +18,7 @@ class CommentService
         $comment = new Comment();
         if ($parentId = $request->parent_id) {
             if (!Comment::find($parentId)) {
-                return ['message' => 'Oops, there is no such a comment to reply at'];
+                return response()->json(['message' => 'Oops, there is no such a comment to reply at']);
             }
         }
         $comment->parent_id = $request?->parent_id;
@@ -27,31 +27,44 @@ class CommentService
 
         $thread = Thread::find($request->thread_id);
         if (!$thread) {
-            return ['message' => 'Oops, there is no such a thread'];
+            return response()->json(['message' => 'Oops, there is no such a thread']);
         }
 
         $thread->comments()->save($comment);
         $thread->refresh();
 
-        return ['comment' => $comment];
+        return response()->json(['message' => 'You have successfully commented on thread.', 'comment' => $comment]);
     }
 
     public function updateComment(Comment $comment, UpdateCommentRequest $request)
     {
-        return $comment->update($request->validated());
+        return response()->json(['comment' => $comment->update($request->validated())]);
+    }
+
+    public function destroyComment(Comment $comment)
+    {
+        try {
+            $comment->delete();
+
+            return response()->json(['message' => 'You have successfully deleted a comment.']);
+        } catch (\Exception $exception) {
+
+            return response()->json(['message' => $exception]);
+        }
     }
 
     public function setVisibility(Comment $comment, SetVisibilityCommentRequest $request)
     {
         $thread = Thread::find($comment->commentable->id);
         if ($thread->user_id != $request->loggedUser()->id) {
-            return ['message' => 'Oops, you can not change visibility on this comment,
-            because you did not create the thread that this comment belongs to'];
+            return response()->json(['message' => 'Oops, you can not change visibility on this comment,
+            because you did not create the thread this comment belongs to'], 403);
         }
         $comment->visible = $request->visible;
         $comment->save();
 
-        return ['comment' => $comment];
+        return response()->json(['message' => 'You have successfully changed visibility of a comment',
+            'comment' => $comment]);
     }
 
     public function voteOnComment(VoteCommentRequest $request)
@@ -59,7 +72,7 @@ class CommentService
         //t1 is type prefix for comments,
         // and we get id from comment url (type prefix + comment id = thing)
         $commentId = $request->comment_id;
-        $fullName = 't1_'.$commentId;
+        $fullName = 't1_' . $commentId;
 
         $response = Http::withToken($request->access_token)
             ->asForm()
@@ -73,11 +86,11 @@ class CommentService
         }
 
         if ($commentId == -1) {
-            return ['message' => 'You down-voted on a comment with id: '.$commentId];
+            return ['message' => 'You down-voted on a comment with id: ' . $commentId];
         } elseif ($commentId == 0) {
-            return ['message' => 'You negated your voting on a comment with id: '.$commentId];
+            return ['message' => 'You negated your voting on a comment with id: ' . $commentId];
         } else {
-            return ['message' => 'You up-voted on a comment with id: '.$commentId];
+            return ['message' => 'You up-voted on a comment with id: ' . $commentId];
         }
     }
 }

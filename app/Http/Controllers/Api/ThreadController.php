@@ -21,44 +21,21 @@ class ThreadController extends Controller
 
     public function store(StoreThreadRequest $request, ThreadService $service)
     {
-        $thread = $service->storeThread($request);
-
-        return response()->json(['thread' => $thread]);
+        return $service->storeThread($request);
     }
 
     public function update(Thread $thread, UpdateThreadRequest $request, ThreadService $service)
     {
-        $response = $service->updateThread($thread, $request);
-
-        if (Arr::exists($response, 'message')) {
-            return response()->json(['message' => $response['message']]);
-        }
-
-        return response()->json(['thread' => $thread]);
+        return $service->updateThread($thread, $request);
     }
 
-    public function destroy(Thread $thread)
+    public function destroy(Thread $thread, ThreadService $service)
     {
-        try {
-            $thread->delete();
-
-            return response()->json(['message' => 'You have successfully deleted a thread']);
-        } catch (\Exception $exception) {
-            return response()->json(['message' => $exception]);
-        }
+        $service->destroyThread($thread);
     }
 
-    public function publish(Thread $thread, Request $request)
+    public function publish(Thread $thread, Request $request, ThreadService $service)
     {
-        $response = Http::withToken($request->access_token)
-            ->asForm()
-            ->post('https://oauth.reddit.com/api/submit', [
-                'title' => $thread->title,
-                'text' => $thread->text,
-                'sr' => 'r/'.$thread->subreddit_name,
-                'kind' => 'self'
-            ]);
-
-        return $response->json();
+        $service->publishThread($thread, $request);
     }
 }

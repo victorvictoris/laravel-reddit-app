@@ -16,54 +16,28 @@ class CommentController extends Controller
 {
     public function show(Comment $comment)
     {
-
         return response()->json(['comment' => $comment]);
     }
 
     public function store(StoreCommentRequest $request, CommentService $service)
     {
-        $response = $service->storeComment($request);
-
-        if (Arr::exists($response, 'message')) {
-
-            return response()->json(['message' => $response['message']], 404);
-        } else {
-
-            return response()->json(['comment' => $response['comment']]);
-        }
+        return $service->storeComment($request);
     }
 
     public function update(Comment $comment, UpdateCommentRequest $request, CommentService $service)
     {
-        $service->updateComment($comment, $request);
-
-        return response()->json(['comment' => $comment]);
+       return $service->updateComment($comment, $request);
     }
 
     //Implemented as Soft Delete, for better tracking
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment, CommentService $service)
     {
-        try {
-            $comment->delete();
-
-            return response()->json(['message' => 'You have successfully deleted a comment.']);
-        } catch (\Exception $exception) {
-
-            return response()->json(['message' => $exception]);
-        }
+        return $service->destroyComment($comment);
     }
 
     public function visible(Comment $comment, SetVisibilityCommentRequest $request, CommentService $service)
     {
-        $response = $service->setVisibility($comment, $request);
-
-        if (Arr::exists($response, 'message')) {
-
-            return response()->json(['message' => $response['message']], 403);
-        } else {
-
-            return response()->json(['comment' => $response['comment']]);
-        }
+        return $service->setVisibility($comment, $request);
     }
 
     public function vote(VoteCommentRequest $request, CommentService $service)
