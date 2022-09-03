@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Http\Requests\Api\Comment\SetVisibilityCommentRequest;
 use App\Http\Requests\Api\Comment\StoreCommentRequest;
 use App\Http\Requests\Api\Comment\UpdateCommentRequest;
+use App\Http\Requests\Api\Comment\VoteCommentRequest;
 use App\Models\Comment;
 use App\Models\Thread;
+use Illuminate\Support\Facades\Http;
 
 class CommentService
 {
@@ -50,5 +52,32 @@ class CommentService
         $comment->save();
 
         return ['comment' => $comment];
+    }
+
+    public function voteOnComment(VoteCommentRequest $request)
+    {
+        //t1 is type prefix for comments,
+        // and we get id from comment url (type prefix + comment id = thing)
+        $commentId = $request->comment_id;
+        $fullName = 't1_'.$commentId;
+
+        $response = Http::withToken($request->access_token)
+            ->asForm()
+            ->post('https://oauth.reddit.com/api/vote', [
+                'dir' => $request->direction,
+                'id' => $fullName
+            ]);
+
+        if ($response->status() == 404) {
+            return ['message' => 'There is no comment with that id'];
+        }
+
+        if ($commentId == -1) {
+            return ['message' => 'You down-voted on a comment with id: '.$commentId];
+        } elseif ($commentId == 0) {
+            return ['message' => 'You negated your voting on a comment with id: '.$commentId];
+        } else {
+            return ['message' => 'You up-voted on a comment with id: '.$commentId];
+        }
     }
 }

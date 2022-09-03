@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Comment\SetVisibilityCommentRequest;
 use App\Http\Requests\Api\Comment\StoreCommentRequest;
 use App\Http\Requests\Api\Comment\UpdateCommentRequest;
+use App\Http\Requests\Api\Comment\VoteCommentRequest;
 use App\Models\Comment;
 use App\Services\CommentService;
 use Illuminate\Http\Request;
@@ -63,5 +64,10 @@ class CommentController extends Controller
 
             return response()->json(['comment' => $response['comment']]);
         }
+    }
+
+    public function vote(VoteCommentRequest $request, CommentService $service)
+    {
+        return $service->voteOnComment($request);
     }
 }

@@ -41,6 +41,7 @@ Route::middleware('redditRegistered')->group(function () {
 
     Route::prefix('comment')->controller(CommentController::class)->group(function () {
         Route::post('/store', 'store')->name('comment.store');
+        Route::post('/vote', 'vote')->name('comment.vote');
         Route::patch('/update/{comment}', 'update')->name('comment.update');
         Route::delete('/destroy/{comment}', 'destroy')->name('comment.destroy');
         Route::post('/visible/{comment}', 'visible')->name('comment.visible');

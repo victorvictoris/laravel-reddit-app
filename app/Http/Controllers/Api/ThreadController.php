@@ -50,17 +50,15 @@ class ThreadController extends Controller
 
     public function publish(Thread $thread, Request $request)
     {
-//        dd($request->user);
         $response = Http::withToken($request->access_token)
-            ->withUserAgent($thread->subreddit_name . ' by /u/' . $request->user->username . ' (Phapper 1.0)')
             ->asForm()
-            ->get('https://oauth.reddit.com/api/submit', [
+            ->post('https://oauth.reddit.com/api/submit', [
                 'title' => $thread->title,
                 'text' => $thread->text,
-                'sr' => $thread->subreddit_name,
+                'sr' => 'r/'.$thread->subreddit_name,
                 'kind' => 'self'
             ]);
 
-        return $response;
+        return $response->json();
     }
 }
