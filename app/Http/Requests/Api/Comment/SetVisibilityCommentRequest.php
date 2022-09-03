@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCommentRequest extends FormRequest
+class SetVisibilityCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class StoreCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'comment' => ['required', 'string'],
-            'thread_id' => ['required', 'integer'],
-            'parent_id' => ['nullable', 'string']
+            'visible' => ['required', 'boolean']
         ];
     }
 

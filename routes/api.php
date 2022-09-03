@@ -43,7 +43,7 @@ Route::middleware('redditRegistered')->group(function () {
         Route::post('/store', 'store')->name('comment.store');
         Route::patch('/update/{comment}', 'update')->name('comment.update');
         Route::delete('/destroy/{comment}', 'destroy')->name('comment.destroy');
-        Route::post('/visibility/{comment}', 'setVisibility')->name('comment.visibility');
+        Route::post('/visible/{comment}', 'visible')->name('comment.visible');
         Route::get('/{comment}', 'show')->name('comment.show');
     });
 });
