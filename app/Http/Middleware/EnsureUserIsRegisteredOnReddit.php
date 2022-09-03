@@ -26,6 +26,7 @@ class EnsureUserIsRegisteredOnReddit
                     return response(['message' => 'Your access token expired.'], 401);
                 }
                 if (Hash::check($request->access_token, $redditAccessToken->access_token)) {
+                    $request->merge(array('user' => $user));
                     return $next($request);
                 }
             }

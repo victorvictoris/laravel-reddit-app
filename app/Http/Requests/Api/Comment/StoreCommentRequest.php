@@ -24,7 +24,13 @@ class StoreCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'comment' => ['required', 'string'],
+            'parent_id' => ['nullable', 'string']
         ];
+    }
+
+    public function loggedUser()
+    {
+        return request()->user;
     }
 }

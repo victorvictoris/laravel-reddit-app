@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Thread;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class StoreThreadRequest extends FormRequest
 {
@@ -24,7 +25,14 @@ class StoreThreadRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:300'],
+            'text' => ['required', 'string'],
+            'subreddit_name' => ['string']
         ];
+    }
+
+    public function loggedUser()
+    {
+        return request()->user;
     }
 }

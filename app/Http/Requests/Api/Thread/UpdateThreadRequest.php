@@ -24,7 +24,14 @@ class UpdateThreadRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:300'],
+            'text' => ['required', 'string'],
+            'subreddit_name' => ['string']
         ];
+    }
+
+    public function loggedUser()
+    {
+        return request()->user;
     }
 }
