@@ -34,6 +34,7 @@
                 <th class="text-center" scope="col">Message</th>
                 <th class="text-center" scope="col">Number of comments</th>
                 <th class="text-center" scope="col">Published @</th>
+                <th class="text-center" scope="col">Preview</th>
             </tr>
             </thead>
             <tbody>
@@ -47,6 +48,11 @@
                         @empty(!$thread->published_at)
                             Published at: {{$thread->published_at}} @ r/{{$thread->subreddit_name}}
                         @endempty
+                    </td>
+                    <td class="text-center">
+                        <a class="text-white" target="_blank" href="{{route('thread.show', ['thread' => $thread])}}">
+                            Preview
+                        </a>
                     </td>
                 </tr>
             @endforeach

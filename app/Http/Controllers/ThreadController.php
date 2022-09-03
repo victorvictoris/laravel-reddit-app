@@ -16,4 +16,9 @@ class ThreadController extends Controller
     {
         return view('threads/index', ['threads' => $this->threads]);
     }
+
+    public function show(Thread $thread)
+    {
+        return view('threads/show', ['thread' => $thread]);
+    }
 }

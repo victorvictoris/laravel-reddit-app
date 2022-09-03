@@ -20,4 +20,5 @@ Route::get('/', function () {
 
 Route::prefix('thread')->controller(ThreadController::class)->group(function () {
     Route::get('/', 'index')->name('thread.index');
+    Route::get('/{thread}', 'show')->name('thread.show');
 });
