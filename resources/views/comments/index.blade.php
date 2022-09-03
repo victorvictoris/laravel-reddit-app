@@ -2,7 +2,7 @@
 <ul>
     @foreach($comment->replies as $reply)
         @if($comment->replies->count() > 0)
-            @include('comments.replies', ['reply' => $reply])
+            @include('comments.replies', ['reply' => $reply, 'color' => $color])
         @else
             <li class="list-group-item-primary">{{$reply->comment}}</li>
         @endif

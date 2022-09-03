@@ -19,6 +19,8 @@ class ThreadController extends Controller
 
     public function show(Thread $thread)
     {
-        return view('threads/show', ['thread' => $thread]);
+        $colors = ['secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+
+        return view('threads/show', ['thread' => $thread, 'colors' => $colors]);
     }
 }
