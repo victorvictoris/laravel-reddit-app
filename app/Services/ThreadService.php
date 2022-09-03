@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Api\Thread\PublishThreadRequest;
 use App\Http\Requests\Api\Thread\StoreThreadRequest;
 use App\Http\Requests\Api\Thread\UpdateThreadRequest;
 use App\Models\Thread;
@@ -41,17 +42,22 @@ class ThreadService
         }
     }
 
-    public function publishThread(Thread $thread, Request $request)
+    public function publishThread(Thread $thread, PublishThreadRequest $request)
     {
+        $subredditName = $request->subreddit_name;
         $response = Http::withToken($request->access_token)
             ->asForm()
             ->post('https://oauth.reddit.com/api/submit', [
                 'title' => $thread->title,
                 'text' => $thread->text,
-                'sr' => 'r/'.$thread->subreddit_name,
+                'sr' => 'r/'.$subredditName,
                 'kind' => 'self'
             ]);
 
-        return response()->json(['message' => $response->status()]);
+        $thread->subreddit_name = $subredditName;
+        $thread->published_at = Carbon::now();
+        $thread->save();
+
+        return response()->json(['message' => $response, 'thread' => $thread]);
     }
 }

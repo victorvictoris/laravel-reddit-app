@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Thread\PublishThreadRequest;
 use App\Http\Requests\Api\Thread\StoreThreadRequest;
 use App\Http\Requests\Api\Thread\UpdateThreadRequest;
 use App\Models\Thread;
@@ -34,7 +35,7 @@ class ThreadController extends Controller
         $service->destroyThread($thread);
     }
 
-    public function publish(Thread $thread, Request $request, ThreadService $service)
+    public function publish(Thread $thread, PublishThreadRequest $request, ThreadService $service)
     {
         $service->publishThread($thread, $request);
     }

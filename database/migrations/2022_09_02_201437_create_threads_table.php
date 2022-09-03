@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('title', 300);
             $table->text('text');
             $table->string('subreddit_name')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

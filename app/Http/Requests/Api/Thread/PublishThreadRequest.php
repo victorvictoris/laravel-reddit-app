@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Api\Thread;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
-class StoreThreadRequest extends FormRequest
+class PublishThreadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +24,7 @@ class StoreThreadRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'max:300'],
-            'text' => ['required', 'string']
+            'subreddit_name' => ['required', 'string']
         ];
-    }
-
-    public function loggedUser()
-    {
-        return request()->user;
     }
 }

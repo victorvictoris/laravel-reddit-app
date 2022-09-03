@@ -19,6 +19,7 @@ class Thread extends Model
         'user_id',
         'title',
         'text',
-        'subreddit_name'
+        'subreddit_name',
+        'published_at'
     ];
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ThreadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix('thread')->controller(ThreadController::class)->group(function () {
+    Route::get('/', 'index')->name('thread.index');
 });
