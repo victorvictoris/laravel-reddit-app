@@ -26,13 +26,15 @@
 
     <!--START: Page Content -->
     <main class="mt-3 p-3">
+        <a href="{{route('thread.index')}}" class="btn btn-primary mb-3">
+            Back
+        </a>
         <table class="table table-striped table-dark table-bordered">
             <thead>
             <tr>
                 <th class="text-center" scope="col">#</th>
                 <th class="text-center" scope="col">Title</th>
                 <th class="text-center" scope="col">Message</th>
-                <th class="text-center" scope="col">Number of comments</th>
                 <th class="text-center" scope="col">Published @</th>
             </tr>
             </thead>
@@ -41,7 +43,6 @@
                 <th scope="row">{{$thread->id}}</th>
                 <td class="text-center">{{$thread->title}}</td>
                 <td class="text-center">{{$thread->text}}</td>
-                <td class="text-center">{{$thread->comments->count()}}</td>
                 <td class="text-center">
                     @empty(!$thread->published_at)
                         Published at: {{$thread->published_at}} @ r/{{$thread->subreddit_name}}

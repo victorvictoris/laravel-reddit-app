@@ -32,7 +32,6 @@
                 <th class="text-center" scope="col">#</th>
                 <th class="text-center" scope="col">Title</th>
                 <th class="text-center" scope="col">Message</th>
-                <th class="text-center" scope="col">Number of comments</th>
                 <th class="text-center" scope="col">Published @</th>
                 <th class="text-center" scope="col">Preview</th>
             </tr>
@@ -43,7 +42,6 @@
                     <th scope="row">{{$thread->id}}</th>
                     <td class="text-center">{{$thread->title}}</td>
                     <td class="text-center">{{$thread->text}}</td>
-                    <td class="text-center">{{$thread->comments->count()}}</td>
                     <td class="text-center">
                         @empty(!$thread->published_at)
                             Published at: {{$thread->published_at}} @ r/{{$thread->subreddit_name}}
