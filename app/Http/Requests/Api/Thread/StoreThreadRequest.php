@@ -26,7 +26,8 @@ class StoreThreadRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:300'],
-            'text' => ['required', 'string']
+            'text' => ['required', 'string'],
+            'subreddit_name' => ['string']
         ];
     }
 
